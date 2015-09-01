@@ -1,0 +1,8 @@
+<module xmlns="urn:jboss:module:1.1" name="javax.jcr" slot="main">
+    <resources>
+        <resource-root path="jcr-2.0.jar"/>
+    </resources>
+    <dependencies>
+        <module name="javax.transaction.api" export="true"/>
+    </dependencies>
+</module>

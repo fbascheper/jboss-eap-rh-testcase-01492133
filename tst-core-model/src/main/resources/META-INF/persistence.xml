@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="tst-core" transaction-type="JTA">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <jta-data-source>java:jboss/datasources/postgresTestDS</jta-data-source>
+        <mapping-file>META-INF/orm.xml</mapping-file>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect" />
+
+            <!-- Create / drop tables. -->
+            <!-- <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
+
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.jdbc.batch.size" value="20" />
+            <property name="hibernate.ejb.use_class_enhancer" value="true" />
+
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+
+            <!--<property name="hibernate.cache.use_second_level_cache" value="true" />-->
+            <!--<property name="hibernate.cache.use_query_cache" value="true" />-->
+            <property name="org.hibernate.flushMode" value="COMMIT"/>
+
+            <!-- Hibernate search -->
+            <property name="hibernate.search.default.directory_provider" value="nl.tenderned.core.search.ConfigurableDirectoryProvider" />
+            <property name="hibernate.search.default.indexManager" value="directory-based" />
+            <property name="hibernate.search.indexing_strategy" value="manual" />
+            <property name="hibernate.search.lucene_version" value="LUCENE_24" />
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

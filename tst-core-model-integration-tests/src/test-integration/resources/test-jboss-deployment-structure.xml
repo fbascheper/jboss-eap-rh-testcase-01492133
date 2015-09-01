@@ -1,0 +1,16 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+    <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
+    <deployment>
+        <resources></resources>
+        <dependencies>
+            <module name="javax.el.api" export="true"/>
+            <module name="javax.faces.api" export="true"/>
+            <module name="javax.persistence.api" export="true"/>
+            <module name="javax.servlet.api" export="true"/>
+
+            <module name="org.hibernate" export="true" />
+            <module name="org.hibernate.validator" export="true" />
+            <module name="org.hibernate.search.orm" export="true" services="import" meta-inf="export"/>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

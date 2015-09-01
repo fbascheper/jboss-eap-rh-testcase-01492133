@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="org.apache.lucene.lucene-queries" slot="3.6.2">
+    <resources>
+        <resource-root path="lucene-queries-3.6.2.jar"/>
+        <resource-root path="jakarta-regexp-1.4.jar"/>
+    </resources>
+
+    <dependencies>
+        <module name="org.apache.lucene" export="true" />
+
+        <module name="javax.api" />
+    </dependencies>
+</module>
+
