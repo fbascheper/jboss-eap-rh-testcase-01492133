@@ -53,4 +53,9 @@
         </dependencies>
     </dependencyManagement>
 
+    <scm>
+        <connection>scm:git:git@github.com:fbascheper/jboss-eap-rh-testcase-01492133.git</connection>
+        <url>scm:git:git@github.com:fbascheper/jboss-eap-rh-testcase-01492133.git</url>
+        <developerConnection>scm:git:git@github.com:fbascheper/jboss-eap-rh-testcase-01492133.git</developerConnection>
+    </scm>
 </project>
