@@ -16,7 +16,7 @@
     <description>TST Build - Complete</description>
 
     <properties>
-        <!-- all properties are set using the parent pom and its profiles (which can be activated using the maven settings.xml -->
+        <altDeploymentRepository>release-repo::default::file:../../releases</altDeploymentRepository>
     </properties>
 
     <modules>
