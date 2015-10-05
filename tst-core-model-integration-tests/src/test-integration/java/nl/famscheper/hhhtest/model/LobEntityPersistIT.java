@@ -6,7 +6,6 @@ package nl.famscheper.hhhtest.model;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -14,16 +13,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 
+import nl.famscheper.hhhtest.dao.LobEntityDao;
 import nl.famscheper.hhhtest.util.ArquillianDeploymentSupport;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.junit.InSequence;
-import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
@@ -42,10 +38,8 @@ public class LobEntityPersistIT {
     private static final Logger LOGGER = getLogger(LobEntityPersistIT.class);
     private static final String PDF_FILE_NAME = "Kastelen_en_Landhuizenroute_Vorden_nl.pdf";
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private static Long lobEntityId;
+    @Inject
+    LobEntityDao lobEntityDao;
 
     @Deployment
     public static Archive<?> createDeploymentPackage() {
@@ -54,63 +48,41 @@ public class LobEntityPersistIT {
         return archive;
     }
 
+    @Test
+    public void runTests() {
+        int size = loadBinaryFile(PDF_FILE_NAME).length;
+        assertThat(size, is(not(0)));
+
+        Long lobEntityId = persistEntityWithoutLob();
+        updateEntityWithLob(lobEntityId, size);
+        loadEntityWithLob(lobEntityId, size);
+    }
+
     /**
      * Persist initial entity, without lob.
+     *
+     * @return {@code ID} of the persisted entity.
      */
-    @Test
-    //    @UsingDataSet(value = {"data/entity/LobEntityPersistIT-data.xml"})
-    //    @Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
-    @Transactional(TransactionMode.COMMIT)
-    @InSequence(1)
-    public void testPersistEntityWithoutLob() {
+    private Long persistEntityWithoutLob() {
 
-        LobEntity lobEntity = new LobEntity();
-        lobEntity.setName(PDF_FILE_NAME);
-        lobEntity.setLob(null);
-
-        entityManager.persist(lobEntity);
-
-        lobEntityId = lobEntity.getId();
+        Long lobEntityId = lobEntityDao.persistEntityWithoutLob();
         assertThat(lobEntityId, notNullValue());
 
         LOGGER.info("**** Persisted LobEntity with id = {}", lobEntityId);
+
+        return lobEntityId;
     }
 
     /**
      * Update entity with a lob.
+     *
+     * @param lobEntityId {@code ID} of the persisted entity
+     * @param size        expected size of the lob
      */
-    @Test
-    //    @UsingDataSet(value = {"data/entity/LobEntityPersistIT-data.xml"})
-    //    @Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
-    @Transactional(TransactionMode.COMMIT)
-    @InSequence(2)
-    public void testUpdateEntityWithLob() {
+    private void updateEntityWithLob(Long lobEntityId, int size) {
         assertThat(lobEntityId, notNullValue());
 
-        LobEntity found = entityManager.find(LobEntity.class, lobEntityId);
-        assertThat(found, notNullValue());
-
-        LOGGER.info("**** Found LobEntity with id = {}", found.getId());
-
-        assertThat(found.getId(), is(lobEntityId));
-        assertThat(found.getName(), notNullValue());
-        assertThat(found.getLob(), nullValue());
-
-        found.setLob(loadBinaryFile(PDF_FILE_NAME));
-    }
-
-    /**
-     * Load entity with a lob.
-     */
-    @Test
-    //    @UsingDataSet(value = {"data/entity/LobEntityPersistIT-data.xml"})
-    //    @Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
-    @Transactional(TransactionMode.COMMIT)
-    @InSequence(3)
-    public void loadEntityWithLob() {
-        assertThat(lobEntityId, notNullValue());
-
-        LobEntity found = entityManager.find(LobEntity.class, lobEntityId);
+        LobEntity found = lobEntityDao.updateEntityWithLob(lobEntityId);
         assertThat(found, notNullValue());
 
         LOGGER.info("**** Found LobEntity with id = {}", found.getId());
@@ -118,16 +90,27 @@ public class LobEntityPersistIT {
         assertThat(found.getId(), is(lobEntityId));
         assertThat(found.getName(), notNullValue());
         assertThat(found.getLob(), notNullValue());
-        assertThat(found.getLob().length, is(not(0)));
-        assertThat(found.getLob().length, is(loadBinaryFile(PDF_FILE_NAME).length));
+        assertThat(found.getLob().length, is(size));
+    }
 
-        // detach entity
-        entityManager.clear();
+    /**
+     * Load entity with a lob.
+     *
+     * @param lobEntityId {@code ID} of the persisted entity
+     * @param size        expected size of the lob
+     */
+    private void loadEntityWithLob(Long lobEntityId, int size) {
+        assertThat(lobEntityId, notNullValue());
 
-        // update name
-        found.setName(found.getName() + "_updated");
-        found = entityManager.merge(found);
-        LOGGER.debug("Successfully merged entity {}", found);
+        LobEntity found = lobEntityDao.loadEntityWithLob(lobEntityId);
+        assertThat(found, notNullValue());
+
+        LOGGER.info("**** Found LobEntity with id = {}", found.getId());
+
+        assertThat(found.getId(), is(lobEntityId));
+        assertThat(found.getName(), notNullValue());
+        assertThat(found.getLob(), notNullValue());
+        assertThat(found.getLob().length, is(size));
     }
 
     /**
@@ -140,7 +123,7 @@ public class LobEntityPersistIT {
         byte[] data;
 
         try (
-                InputStream inputStream = LobEntityPersistIT.class.getClassLoader().getResourceAsStream(name);
+                InputStream inputStream = LobEntity.class.getClassLoader().getResourceAsStream(name);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         ) {
 

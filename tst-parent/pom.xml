@@ -1446,7 +1446,7 @@
                         <failOnMissingWebXml>true</failOnMissingWebXml>
                         <warName>${project.artifactId}</warName>
                         <webappDirectory>${project.build.directory}/exploded/${project.artifactId}.war</webappDirectory>
-                        <packagingExcludes>WEB-INF/lib/*.jar,**/rebel.xml</packagingExcludes>
+                        <packagingExcludes>**/rebel.xml</packagingExcludes>
                         <webResources>
                             <resource>
                                 <directory>src/main/webapp</directory>
@@ -1455,8 +1455,6 @@
                         </webResources>
                         <archive>
                             <manifest>
-                                <addClasspath>true</addClasspath>
-                                <classpathPrefix>lib/</classpathPrefix>
                             </manifest>
                         </archive>
                     </configuration>

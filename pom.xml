@@ -21,6 +21,7 @@
     <modules>
         <module>tst-parent</module>
         <module>tst-core-model</module>
+        <module>tst-demo-war</module>
         <module>tst-docker-images</module>
         <module>tst-core-model-integration-tests</module>
     </modules>
@@ -33,6 +34,7 @@
                 <artifactId>tst-core-model</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
+                <scope>compile</scope>
             </dependency>
 
             <dependency>

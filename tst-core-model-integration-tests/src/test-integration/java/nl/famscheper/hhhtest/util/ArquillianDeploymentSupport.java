@@ -27,6 +27,7 @@ public final class ArquillianDeploymentSupport {
     public static WebArchive createIntegrationTestArchive(String archiveName) {
 
         WebArchive result = ShrinkWrap.create(WebArchive.class, archiveName)
+                .addPackages(true, "nl/famscheper/hhhtest/dao")
                 .addPackages(true, "nl/famscheper/hhhtest/model")
                 .addPackages(true, "nl/famscheper/hhhtest/util");
 

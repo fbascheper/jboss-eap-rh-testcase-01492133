@@ -19,17 +19,13 @@
             <property name="hibernate.jdbc.batch.size" value="20" />
             <property name="hibernate.ejb.use_class_enhancer" value="true" />
 
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <!--<property name="hibernate.hbm2ddl.auto" value="validate"/>-->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
             <!--<property name="hibernate.cache.use_second_level_cache" value="true" />-->
             <!--<property name="hibernate.cache.use_query_cache" value="true" />-->
             <property name="org.hibernate.flushMode" value="COMMIT"/>
 
-            <!-- Hibernate search -->
-            <property name="hibernate.search.default.directory_provider" value="nl.tenderned.core.search.ConfigurableDirectoryProvider" />
-            <property name="hibernate.search.default.indexManager" value="directory-based" />
-            <property name="hibernate.search.indexing_strategy" value="manual" />
-            <property name="hibernate.search.lucene_version" value="LUCENE_24" />
         </properties>
 
     </persistence-unit>
