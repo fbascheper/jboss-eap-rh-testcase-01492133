@@ -120,6 +120,7 @@
         <version.ejb.plugin>2.5</version.ejb.plugin>
         <version.enforcer.plugin>1.4</version.enforcer.plugin>
         <version.findbugs.plugin>3.0.1</version.findbugs.plugin>
+        <version.help.plugin>2.2</version.help.plugin>
         <version.install.plugin>2.5.2</version.install.plugin>
         <version.invoker.plugin>1.10</version.invoker.plugin>
         <!-- Keep jacoco at 7.4 due to http://jira.sonarsource.com/browse/SONARJAVA-1091
