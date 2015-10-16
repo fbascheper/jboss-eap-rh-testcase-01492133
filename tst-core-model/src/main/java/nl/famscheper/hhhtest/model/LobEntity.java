@@ -2,6 +2,7 @@ package nl.famscheper.hhhtest.model;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import nl.famscheper.hhhtest.listener.TrimEntityListener;
 
 /**
  * Sample entity with a Lob.
@@ -18,6 +21,7 @@ import javax.persistence.Table;
  */
 @javax.persistence.Entity
 @Table(name = "TST_LOB_ENTITY")
+@EntityListeners({TrimEntityListener.class})
 public class LobEntity {
 
     @Id
